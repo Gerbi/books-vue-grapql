@@ -1,57 +1,60 @@
 <template>
-    <div class="create">
-        <h1>Create Book</h1>
-        <form action="" method="POST" @submit.prevent="addBook">
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title" v-model="title">
-            </div>
-            <div class="form-group">
-                <label for="author">Author</label>
-                <input type="text" name="author" id="author" v-model="author">
-            </div>
-            <div class="form-group">
-                <label for="image">Image</label>
-                <input type="text" name="image" id="image" v-model="image">
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea name="description" id="description" cols="30" rows="10" v-model="description"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Link</label>
-                <input type="text" name="link" id="link" v-model="link">
-            </div>
-            <div class="form-group">
-                <label><input type="checkbox" name="featured" v-model="featured">Featured</label>
-            </div>
-            <div class="form-group">
-                <ApolloQuery :query="require('@/graphql/queries/Categories.gql')">
-                    <!-- The result will automatically updated -->
-                    <template slot-scope="{ result: { data, loading }, isLoading }">
-                        <!-- Some content -->
-                        <div v-if="isLoading">Loading...</div>
-                        <select v-else v-model="category">
-                            <option href="#" v-for="category of data.categories" :key="category.id"
-                                    :value="category.id">
-                                {{category.name}}
+    <div class="create max-w-sm mx-auto mt-6">
+            <h1 align="center" class="text-grey-light">Create Book</h1><br>
+            <form method="POST" class="bg-dark shadow-md rounded px-8 pt-4 pb-8 mb-4" @submit.prevent="addBook">
+                <div class="mb-5">
+                    <label class="text-grey font-bold mb-2" for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="Title" class="bg-grey-darkest text-grey-lighter w-full py-2" v-model="title">
+                </div>
+                <div class="mb-5">
+                    <label class="text-grey font-bold mb-2" for="title">Author</label>
+                    <input type="text" id="author" name="author" placeholder="Author" class="bg-grey-darkest text-grey-lighter w-full" v-model="author">
+                </div>
+                <div class="mb-5">
+                    <label class="text-grey font-bold mb-2" for="image">Image</label>
+                    <input type="text" id="image" name="image" placeholder="Image" class="bg-grey-darkest text-grey-lighter w-full" v-model="image">
+                </div>
+                <div class="mb-5">
+                    <label class="font-bold mb-2" for="description">Description</label>
+                    <textarea name="description" id="description" class="bg-grey-darkest text-grey-lighter w-full" rows="8" v-model="description"></textarea>
+                </div>
+                <div class="mb-5">
+                    <label class="font-bold mb-2" for="link">Link</label>
+                    <input type="text" name="link" id="link" class="bg-grey-darkest text-grey-lighter w-full" placeholder="Link" v-model="link">
+                </div>
+                <div class="mb-5">
+                    <label class="font-bold mb-2"><input type="checkbox" name="featured" v-model="featured" class="mr-2">Featured</label>
+                </div>
+                <div class="mb-5">
+                    <ApolloQuery :query="require('@/graphql/queries/Categories.gql')">
+                        <template slot-scope="{ result: { data, loading }, isLoading }">
+                            <div v-if="isLoading">Loading...</div>
+                            <select v-else v-model="category" class="bg-dark pt-2 pb-1 pl-2 rounded text-grey-dark w-full">
+                                <option class="text-grey-light border border-none" v-for="category of data.categories" :key="category.id" :value="category.id">
+                            {{ category.name }}
                             </option>
-                        </select>
-                    </template>
-                </ApolloQuery>
-            </div>
-
-            <div class="form-group">
-                <button type="submit">Add Book</button>
-            </div>
-        </form>
-    </div>
+                            </select>
+                        </template>
+                    </ApolloQuery>
+                </div>
+                <div class="flex items-center justify-end">
+                    <button class="bg-dark text-grey font-bold py-2 px-4 mr-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-grey hover:bg-grey-lightest text-grey-darkest font-bold py-2 px-4 rounded">Add Book</button>
+                </div>
+            </form>
+            <p class="text-center text-grey text-xs mb-4">
+                ©2019 GerbiDev. All rights reserved.
+            </p>
+        </div>
 </template>
 
 <script>
     import addBook from '@/graphql/mutations/AddBook.gql'
+
     export default {
-        name: "AddBock",
+
         data() {
             return {
                 title: '',
@@ -89,21 +92,22 @@
     }
 </script>
 
+
 <style scoped>
-    .form-group {
-        margin-bottom: 32px;
-    }
-
-    input[type="text"] {
+    input[type="text"], textarea {
+        color: #f1f5f8;
         padding: 10px 14px;
-    }
-
-    button {
-        padding: 16px;
-        background: #027bff;
-        color: white;
+        border: 0px solid lightgray;
         border-radius: 5px;
+    }
+    select {
+        color: #f1f5f8;
+        background-color: #3d4852;
         font-size: 16px;
     }
 
+    label {
+        display: block;
+    }
 </style>
+

@@ -1,30 +1,37 @@
 <template>
-    <div class="book">
-        <ApolloQuery :query="require('@/graphql/queries/Book.gql')" :variables="{id: $route.params.id}">
+    <div class="book container">
+        <ApolloQuery :query="require('@/graphql/queries/Book.gql')" :variables="{ id: $route.params.id}">
             <template slot-scope="{ result: { data, loading }, isLoading }">
                 <div v-if="isLoading">Loading...</div>
-                <div v-else>
-                    <div>{{data.book.title}}</div>
-                    <div>{{data.book.author}}</div>
-                    <!--<img :src="`http://localhost:8000/img/${book.image}`" alt="cover image">-->
-                    <img :src="`http://localhost:8000/img/${data.book.image}`" alt="book cover">
+                <div v-else class="flex mt-16 flex-col lg:flex-row">
                     <div>
-                        <router-link :to="`/books/${data.book.id}/edit`" href="" class="link-margin">Edit</router-link>
-                        <a href="" class="link-margin" @click.prevent="deleteBook">Delete</a>
+                        <img :src="`http://localhost:8000/img/${data.book.image}`" alt="book cover">
+                    </div>
+                    <div class="w-full lg:w-2/3 ml-0 mt-8 lg:mt-0 lg:ml-16">
+                        <div class="text-4xl text-grey-lighter font-bold">{{ data.book.title }}</div>
+                        <div class="text-2xl text-grey-light mb-8">{{ data.book.author }}</div>
+                        <div class="text-lg text-grey leading-normal">{{ data.book.description }}</div>
+
+                        <div class="my-12">
+                            <a :href="data.book.link" target="_blank" class="border border-blue-dark border-solid rounded text-blue px-4 py-4 hover:bg-blue-dark hover:text-white">View Link</a>
+                        </div>
+                        <router-link :to="`/books/${data.book.id}/edit`" href="#" class="text-grey hover:text-green pr-2">Edit</router-link>
+                        &middot;
+                        <a href="#" class="text-grey hover:text-red pl-2" @click.prevent="deleteBook">Delete</a>
+                    </div>
+                    <div>
                     </div>
                 </div>
             </template>
         </ApolloQuery>
-
     </div>
 </template>
 
 <script>
     import deleteBook from '@/graphql/mutations/DeleteBook.gql'
     export default {
-        name: "Book",
-        methods:{
-            deleteBook(){
+        methods: {
+            deleteBook() {
                 this.$apollo.mutate({
                     mutation: deleteBook,
                     variables: {
@@ -36,9 +43,7 @@
                 })
             }
         }
+
     }
 </script>
 
-<style scoped>
-
-</style>
